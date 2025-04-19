@@ -1,3 +1,5 @@
+import { Button } from "@/components/shared/ui/button";
+
 export default function Start() {
 	return (
 		<main className="flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
@@ -5,12 +7,9 @@ export default function Start() {
 			<p className="text-lg mb-6">
 				クイズを始めるにはスタートボタンをクリックしてください
 			</p>
-			<button
-				type="button"
-				className="px-6 py-3 bg-blue-500 text-white rounded hover:bg-blue-600 dark:bg-blue-700 dark:hover:bg-blue-800"
-			>
+			<Button className="px-6 py-3 bg-blue-500 text-white rounded hover:bg-blue-600 dark:bg-blue-700 dark:hover:bg-blue-800">
 				START
-			</button>
+			</Button>
 		</main>
 	);
 }
