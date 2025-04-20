@@ -1,5 +1,6 @@
 "use client"
 import { useEffect, useState } from "react"
+import { Button } from "./shared/ui/button"
 
 const question = [
 	{
@@ -74,13 +75,9 @@ const GameScreen = () => {
 							placeholder="ここに回答を入力"
 							className="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 w-full"
 						/>
-						<button
-							type="button"
-							onClick={handleClick}
-							className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition whitespace-nowrap"
-						>
+						<Button type="button" onClick={handleClick}>
 							回答
-						</button>
+						</Button>
 					</div>
 				</div>
 			</div>
