@@ -20,6 +20,7 @@ import {
 import { Input } from "@/components/shared/ui/input"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useState } from "react"
 import type { ReactNode } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -29,11 +30,12 @@ const formSchema = z.object({
 	username2: z.string().min(1, "入力してください"),
 })
 
-interface Props {
+interface PlayerFormProps {
 	children: ReactNode
 }
 
-export const PlayerSaveForm = ({ children }: Props) => {
+export const PlayerSaveForm = ({ children }: PlayerFormProps) => {
+	const [open, setOpen] = useState<boolean>(false)
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -41,14 +43,16 @@ export const PlayerSaveForm = ({ children }: Props) => {
 			username2: "",
 		},
 	})
-
 	const onSubmit = (values: z.infer<typeof formSchema>) => {
 		console.log(values)
+		setOpen(false)
 	}
 
 	return (
-		<Dialog>
-			<DialogTrigger asChild>{children}</DialogTrigger>
+		<Dialog open={open} onOpenChange={setOpen}>
+			<DialogTrigger asChild onClick={() => setOpen(true)}>
+				{children}
+			</DialogTrigger>
 			<DialogContent className="sm:max-w-[425px] bg-white dark:bg-gray-800">
 				<DialogHeader>
 					<DialogTitle>ゲーム準備</DialogTitle>
@@ -56,7 +60,6 @@ export const PlayerSaveForm = ({ children }: Props) => {
 						対戦する2人のプレイヤー名を入力してください
 					</DialogDescription>
 				</DialogHeader>
-
 				<Form {...form}>
 					<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
 						<FormField
@@ -68,7 +71,7 @@ export const PlayerSaveForm = ({ children }: Props) => {
 									<FormControl>
 										<Input placeholder="名前を入力" {...field} />
 									</FormControl>
-									<FormMessage />
+									<FormMessage className="text-red-500" />
 								</FormItem>
 							)}
 						/>
@@ -81,11 +84,14 @@ export const PlayerSaveForm = ({ children }: Props) => {
 									<FormControl>
 										<Input placeholder="名前を入力" {...field} />
 									</FormControl>
-									<FormMessage />
+									<FormMessage className="text-red-500" />
 								</FormItem>
 							)}
 						/>
-						<div className="flex justify-end">
+						<div className="flex gap-2 justify-end">
+							<Button variant="secondary" onClick={() => setOpen(false)}>
+								キャンセル
+							</Button>
 							<Button className="" type="submit">
 								登録
 							</Button>
