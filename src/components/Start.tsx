@@ -1,3 +1,4 @@
+import { PlayerSaveForm } from "@/components/PlayerForm"
 import { Button } from "@/components/shared/ui/button"
 
 export default function Start() {
@@ -7,9 +8,12 @@ export default function Start() {
 			<p className="text-lg mb-6">
 				クイズを始めるにはスタートボタンをクリックしてください
 			</p>
-			<Button className="px-6 py-3 bg-blue-500 text-white rounded hover:bg-blue-600 dark:bg-blue-700 dark:hover:bg-blue-800">
-				START
-			</Button>
+
+			<PlayerSaveForm>
+				<Button className="px-6 py-3 bg-blue-500 text-white rounded hover:bg-blue-600 dark:bg-blue-700 dark:hover:bg-blue-800">
+					START
+				</Button>
+			</PlayerSaveForm>
 		</main>
 	)
 }
