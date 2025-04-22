@@ -46,9 +46,8 @@ export const PlayerSaveForm = ({ children }: PlayerFormProps) => {
 		},
 	})
 	const onSubmit = (values: z.infer<typeof formSchema>) => {
-		console.log(values)
 		setOpen(false)
-		router.push("/Game")
+		router.push(`/Game?player1=${values.username1}&player2=${values.username2}`)
 	}
 
 	return (
