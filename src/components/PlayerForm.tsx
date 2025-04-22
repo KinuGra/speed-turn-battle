@@ -20,6 +20,7 @@ import {
 import { Input } from "@/components/shared/ui/input"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 import type { ReactNode } from "react"
 import { useForm } from "react-hook-form"
@@ -32,10 +33,15 @@ const formSchema = z.object({
 
 interface PlayerFormProps {
 	children: ReactNode
+	targetCorrectAnswers: number // 追加: 正解数ルールを受け取る
 }
 
-export const PlayerSaveForm = ({ children }: PlayerFormProps) => {
+export const PlayerSaveForm = ({
+	children,
+	targetCorrectAnswers,
+}: PlayerFormProps) => {
 	const [open, setOpen] = useState<boolean>(false)
+	const router = useRouter()
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -44,8 +50,10 @@ export const PlayerSaveForm = ({ children }: PlayerFormProps) => {
 		},
 	})
 	const onSubmit = (values: z.infer<typeof formSchema>) => {
-		console.log(values)
 		setOpen(false)
+		router.push(
+			`/Game?player1=${values.username1}&player2=${values.username2}&targetCorrectAnswers=${targetCorrectAnswers}`,
+		)
 	}
 
 	return (
@@ -57,7 +65,7 @@ export const PlayerSaveForm = ({ children }: PlayerFormProps) => {
 				<DialogHeader>
 					<DialogTitle>ゲーム準備</DialogTitle>
 					<DialogDescription>
-						対戦する2人のプレイヤー名を入力してください
+						プレイする2人のプレイヤー名を入力してください
 					</DialogDescription>
 				</DialogHeader>
 				<Form {...form}>
