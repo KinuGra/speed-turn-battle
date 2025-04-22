@@ -32,6 +32,7 @@ const GameScreen = ({
 		{ name: player1, correctAnswers: 0, answers: [] as string[] },
 		{ name: player2, correctAnswers: 0, answers: [] as string[] },
 	])
+	const [correctAnswers, setCorrectAnswers] = useState<string[]>([]) // 過去の正解回答を保持
 
 	// 合計正解数を監視し、条件を満たしたらリザルト画面に遷移
 	useEffect(() => {
@@ -70,7 +71,7 @@ const GameScreen = ({
 
 		if (usedAnswers.includes(normalizedAnswer)) {
 			setNotification("既に回答されています。再度回答を入力してください。")
-			setAnswer("")
+			setAnswer("") // フォームをクリア
 			return
 		}
 
@@ -88,13 +89,17 @@ const GameScreen = ({
 				return updatedRecords
 			})
 
+			// 正解回答を追加し、アニメーションをトリガー
+			setCorrectAnswers((prev) => [...prev, normalizedAnswer])
+
 			setCurrentPlayer((prev) => (prev + 1) % 2)
 			setNotification("")
 			setIsModalOpen(true)
+			setAnswer("") // 正解時もフォームをクリア
 		} else {
 			setNotification("不正解です。再度回答を入力してください。")
+			setAnswer("") // フォームをクリア
 		}
-		setAnswer("")
 	}
 
 	useEffect(() => {
@@ -125,7 +130,7 @@ const GameScreen = ({
 				</DialogContent>
 			</Dialog>
 
-			<div className="border-2 border-gray-300 rounded p-4 bg-yellow-50 shadow-md w-1/2 mx-auto mt-5">
+			<div className="border-2 border-gray-300 rounded p-4 bg-gray-50 shadow-md w-1/2 mx-auto mt-5">
 				<div className="flex flex-col justify-center items-center">
 					<h1 className="text-center font-bold text-2xl">問題</h1>
 				</div>
@@ -151,6 +156,21 @@ const GameScreen = ({
 				</div>
 				<div>
 					<p className="text-center text-red-500 mt-3">{notification}</p>
+				</div>
+			</div>
+
+			{/* 正解回答の表示 */}
+			<div className="border-2 border-gray-300 rounded p-4 bg-white shadow-md w-3/4 max-w-130 mx-auto mb-5">
+				<h2 className="text-xl font-bold mb-4">既出回答</h2>
+				<div className="flex flex-wrap gap-2">
+					{correctAnswers.map((answer, index) => (
+						<div
+							key={index}
+							className="bg-green-200 text-green-800 px-4 py-2 rounded-full shadow-md animate-bounce"
+						>
+							{answer}
+						</div>
+					))}
 				</div>
 			</div>
 
