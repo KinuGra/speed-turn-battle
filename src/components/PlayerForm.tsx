@@ -20,6 +20,7 @@ import {
 import { Input } from "@/components/shared/ui/input"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 import type { ReactNode } from "react"
 import { useForm } from "react-hook-form"
@@ -36,6 +37,7 @@ interface PlayerFormProps {
 
 export const PlayerSaveForm = ({ children }: PlayerFormProps) => {
 	const [open, setOpen] = useState<boolean>(false)
+	const router = useRouter()
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -46,6 +48,7 @@ export const PlayerSaveForm = ({ children }: PlayerFormProps) => {
 	const onSubmit = (values: z.infer<typeof formSchema>) => {
 		console.log(values)
 		setOpen(false)
+		router.push("/Game")
 	}
 
 	return (
