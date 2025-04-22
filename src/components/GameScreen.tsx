@@ -60,17 +60,21 @@ const GameScreen = ({ player1, player2 }: GameScreenProps) => {
 		<div className="h-screen flex flex-col justify-between">
 			{/* モーダル */}
 			<Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-				<DialogContent>
+				<DialogContent className="bg-gray-100 text-black rounded-lg shadow-lg p-6">
 					<DialogHeader>
-						<DialogTitle>{players[currentPlayer]}さんのターンです</DialogTitle>
+						<DialogTitle className="text-2xl font-bold text-center">
+							{players[currentPlayer]}さんのターン
+						</DialogTitle>
 					</DialogHeader>
-					<div className="flex justify-center mt-4">
-						<Button onClick={() => setIsModalOpen(false)}>OK</Button>
+					<div className="flex justify-center mt-6">
+						<Button variant="secondary" onClick={() => setIsModalOpen(false)}>
+							OK
+						</Button>
 					</div>
 				</DialogContent>
 			</Dialog>
 
-			<div className="border-2 border-gray-300 rounded p-4 bg-cyan-50 shadow-md w-1/2 mx-auto mt-5">
+			<div className="border-2 border-gray-300 rounded p-4 bg-yellow-50 shadow-md w-1/2 mx-auto mt-5">
 				<div className="flex flex-col justify-center items-center">
 					<h1 className="text-center font-bold text-2xl">問題</h1>
 				</div>

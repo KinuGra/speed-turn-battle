@@ -1,7 +1,7 @@
 export const question = [
 	{
 		id: 1,
-		question: "世界の国の首都をすべて答えてください",
+		question: "世界の国の首都をできるだけ答えてください",
 		answer: [
 			"東京".toLowerCase(), // 日本
 			"カブール".toLowerCase(), // アフガニスタン
@@ -188,6 +188,7 @@ export const question = [
 			"ジャカルタ".toLowerCase(), // インドネシア
 			"テヘラン".toLowerCase(), // イラン
 			"バグダッド".toLowerCase(), // イラク
+			"スリジャヤワルダナプラコッテ".toLowerCase(), // スリランカ
 		],
 	},
 ]

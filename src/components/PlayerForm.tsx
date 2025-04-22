@@ -59,7 +59,7 @@ export const PlayerSaveForm = ({ children }: PlayerFormProps) => {
 				<DialogHeader>
 					<DialogTitle>ゲーム準備</DialogTitle>
 					<DialogDescription>
-						対戦する2人のプレイヤー名を入力してください
+						プレイする2人のプレイヤー名を入力してください
 					</DialogDescription>
 				</DialogHeader>
 				<Form {...form}>
