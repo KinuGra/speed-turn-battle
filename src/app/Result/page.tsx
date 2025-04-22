@@ -5,7 +5,10 @@ import { useSearchParams } from "next/navigation"
 export default function Result() {
 	const searchParams = useSearchParams()
 	const playerRecords = JSON.parse(searchParams.get("playerRecords") || "[]")
-	const totalCorrectAnswers = parseInt(searchParams.get("totalCorrectAnswers") || "0", 10)
+	const totalCorrectAnswers = Number.parseInt(
+		searchParams.get("totalCorrectAnswers") || "0",
+		10,
+	)
 	const totalAttempts = playerRecords.reduce(
 		(sum, record) => sum + record.answers.length,
 		0,

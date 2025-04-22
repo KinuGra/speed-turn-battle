@@ -1,14 +1,22 @@
 "use client"
 import { useState } from "react"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./shared/ui/dialog"
 import { Button } from "./shared/ui/button"
+import {
+	Dialog,
+	DialogContent,
+	DialogHeader,
+	DialogTitle,
+} from "./shared/ui/dialog"
 
 interface SettingsModalProps {
 	targetCorrectAnswers: number
 	onSave: (value: number) => void
 }
 
-const SettingsModal = ({ targetCorrectAnswers, onSave }: SettingsModalProps) => {
+const SettingsModal = ({
+	targetCorrectAnswers,
+	onSave,
+}: SettingsModalProps) => {
 	const [isOpen, setIsOpen] = useState(false)
 	const [newTarget, setNewTarget] = useState(targetCorrectAnswers)
 

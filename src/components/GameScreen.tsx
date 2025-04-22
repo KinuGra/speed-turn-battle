@@ -16,7 +16,12 @@ interface GameScreenProps {
 	onGameEnd: (resultData: any) => void
 }
 
-const GameScreen = ({ player1, player2, targetCorrectAnswers, onGameEnd }: GameScreenProps) => {
+const GameScreen = ({
+	player1,
+	player2,
+	targetCorrectAnswers,
+	onGameEnd,
+}: GameScreenProps) => {
 	const [time, setTime] = useState(0)
 	const [answer, setAnswer] = useState("")
 	const [usedAnswers, setUsedAnswers] = useState<string[]>([])

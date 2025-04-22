@@ -36,7 +36,10 @@ interface PlayerFormProps {
 	targetCorrectAnswers: number // 追加: 正解数ルールを受け取る
 }
 
-export const PlayerSaveForm = ({ children, targetCorrectAnswers }: PlayerFormProps) => {
+export const PlayerSaveForm = ({
+	children,
+	targetCorrectAnswers,
+}: PlayerFormProps) => {
 	const [open, setOpen] = useState<boolean>(false)
 	const router = useRouter()
 	const form = useForm<z.infer<typeof formSchema>>({

@@ -1,14 +1,17 @@
 "use client"
 
 import GameScreen from "@/components/GameScreen"
-import { useSearchParams, useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 
 export default function Game() {
 	const searchParams = useSearchParams()
 	const router = useRouter()
 	const player1 = searchParams.get("player1") || "プレイヤー1"
 	const player2 = searchParams.get("player2") || "プレイヤー2"
-	const targetCorrectAnswers = parseInt(searchParams.get("targetCorrectAnswers") || "10", 10) // クエリから取得
+	const targetCorrectAnswers = Number.parseInt(
+		searchParams.get("targetCorrectAnswers") || "10",
+		10,
+	) // クエリから取得
 
 	const handleGameEnd = (resultData: any) => {
 		const query = new URLSearchParams({
