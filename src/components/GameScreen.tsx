@@ -2,6 +2,12 @@
 import { useEffect, useState } from "react"
 import { question } from "../data/questions"
 import { Button } from "./shared/ui/button"
+import {
+	Dialog,
+	DialogContent,
+	DialogHeader,
+	DialogTitle,
+} from "./shared/ui/dialog"
 
 interface GameScreenProps {
 	player1: string
@@ -14,6 +20,7 @@ const GameScreen = ({ player1, player2 }: GameScreenProps) => {
 	const [usedAnswers, setUsedAnswers] = useState<string[]>([])
 	const [currentPlayer, setCurrentPlayer] = useState(0)
 	const [notification, setNotification] = useState("")
+	const [isModalOpen, setIsModalOpen] = useState(false)
 	const players = [player1, player2]
 
 	const handleClick = () => {
@@ -30,8 +37,9 @@ const GameScreen = ({ player1, player2 }: GameScreenProps) => {
 		)
 		if (isCorrect) {
 			setUsedAnswers((prev) => [...prev, normalizedAnswer])
-			setNotification(`${players[(currentPlayer + 1) % 2]}さんのターンです。`)
 			setCurrentPlayer((prev) => (prev + 1) % 2)
+			setNotification("")
+			setIsModalOpen(true)
 		} else {
 			setNotification("不正解です。再度回答を入力してください。")
 		}
@@ -50,6 +58,18 @@ const GameScreen = ({ player1, player2 }: GameScreenProps) => {
 
 	return (
 		<div className="h-screen flex flex-col justify-between">
+			{/* モーダル */}
+			<Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+				<DialogContent>
+					<DialogHeader>
+						<DialogTitle>{players[currentPlayer]}さんのターンです</DialogTitle>
+					</DialogHeader>
+					<div className="flex justify-center mt-4">
+						<Button onClick={() => setIsModalOpen(false)}>OK</Button>
+					</div>
+				</DialogContent>
+			</Dialog>
+
 			<div className="border-2 border-gray-300 rounded p-4 bg-cyan-50 shadow-md w-1/2 mx-auto mt-5">
 				<div className="flex flex-col justify-center items-center">
 					<h1 className="text-center font-bold text-2xl">問題</h1>
