@@ -33,9 +33,10 @@ const formSchema = z.object({
 
 interface PlayerFormProps {
 	children: ReactNode
+	targetCorrectAnswers: number // 追加: 正解数ルールを受け取る
 }
 
-export const PlayerSaveForm = ({ children }: PlayerFormProps) => {
+export const PlayerSaveForm = ({ children, targetCorrectAnswers }: PlayerFormProps) => {
 	const [open, setOpen] = useState<boolean>(false)
 	const router = useRouter()
 	const form = useForm<z.infer<typeof formSchema>>({
@@ -47,7 +48,9 @@ export const PlayerSaveForm = ({ children }: PlayerFormProps) => {
 	})
 	const onSubmit = (values: z.infer<typeof formSchema>) => {
 		setOpen(false)
-		router.push(`/Game?player1=${values.username1}&player2=${values.username2}`)
+		router.push(
+			`/Game?player1=${values.username1}&player2=${values.username2}&targetCorrectAnswers=${targetCorrectAnswers}`,
+		)
 	}
 
 	return (

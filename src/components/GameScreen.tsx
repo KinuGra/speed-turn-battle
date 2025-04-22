@@ -12,19 +12,56 @@ import {
 interface GameScreenProps {
 	player1: string
 	player2: string
+	targetCorrectAnswers: number
+	onGameEnd: (resultData: any) => void
 }
 
-const GameScreen = ({ player1, player2 }: GameScreenProps) => {
+const GameScreen = ({ player1, player2, targetCorrectAnswers, onGameEnd }: GameScreenProps) => {
 	const [time, setTime] = useState(0)
 	const [answer, setAnswer] = useState("")
 	const [usedAnswers, setUsedAnswers] = useState<string[]>([])
 	const [currentPlayer, setCurrentPlayer] = useState(0)
 	const [notification, setNotification] = useState("")
 	const [isModalOpen, setIsModalOpen] = useState(false)
-	const players = [player1, player2]
+	const [playerRecords, setPlayerRecords] = useState([
+		{ name: player1, correctAnswers: 0, answers: [] as string[] },
+		{ name: player2, correctAnswers: 0, answers: [] as string[] },
+	])
+
+	// 合計正解数を監視し、条件を満たしたらリザルト画面に遷移
+	useEffect(() => {
+		const totalCorrectAnswers = playerRecords.reduce(
+			(sum, record) => sum + record.correctAnswers,
+			0,
+		)
+
+		if (totalCorrectAnswers >= targetCorrectAnswers) {
+			onGameEnd({
+				playerRecords,
+				totalCorrectAnswers,
+				timeElapsed: time,
+			})
+		}
+	}, [playerRecords, targetCorrectAnswers, time, onGameEnd])
 
 	const handleClick = () => {
+		// 回答フォームが未入力の場合は何もしない
+		if (!answer.trim()) {
+			setNotification("回答を入力してください。")
+			return
+		}
+
 		const normalizedAnswer = answer.toLowerCase()
+
+		// 回答数をカウント
+		setPlayerRecords((prev) => {
+			const updatedRecords = [...prev]
+			updatedRecords[currentPlayer] = {
+				...updatedRecords[currentPlayer],
+				answers: [...updatedRecords[currentPlayer].answers, normalizedAnswer],
+			}
+			return updatedRecords
+		})
 
 		if (usedAnswers.includes(normalizedAnswer)) {
 			setNotification("既に回答されています。再度回答を入力してください。")
@@ -37,6 +74,15 @@ const GameScreen = ({ player1, player2 }: GameScreenProps) => {
 		)
 		if (isCorrect) {
 			setUsedAnswers((prev) => [...prev, normalizedAnswer])
+			setPlayerRecords((prev) => {
+				const updatedRecords = [...prev]
+				updatedRecords[currentPlayer] = {
+					...updatedRecords[currentPlayer],
+					correctAnswers: updatedRecords[currentPlayer].correctAnswers + 1,
+				}
+				return updatedRecords
+			})
+
 			setCurrentPlayer((prev) => (prev + 1) % 2)
 			setNotification("")
 			setIsModalOpen(true)
@@ -63,7 +109,7 @@ const GameScreen = ({ player1, player2 }: GameScreenProps) => {
 				<DialogContent className="bg-gray-100 text-black rounded-lg shadow-lg p-6">
 					<DialogHeader>
 						<DialogTitle className="text-2xl font-bold text-center">
-							{players[currentPlayer]}さんのターン
+							{playerRecords[currentPlayer].name}さんのターン
 						</DialogTitle>
 					</DialogHeader>
 					<div className="flex justify-center mt-6">
@@ -95,7 +141,7 @@ const GameScreen = ({ player1, player2 }: GameScreenProps) => {
 				</div>
 				<div>
 					<p className="text-center font-bold mt-3">
-						現在のターン: {players[currentPlayer]}さん
+						現在のターン: {playerRecords[currentPlayer].name}さん
 					</p>
 				</div>
 				<div>
