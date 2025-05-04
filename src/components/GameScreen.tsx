@@ -189,9 +189,9 @@ const GameScreen = ({
 			<div className="border-2 border-gray-300 rounded p-4 bg-white shadow-md w-3/4 max-w-130 mx-auto mb-5">
 				<h2 className="text-xl font-bold mb-4">既出回答</h2>
 				<div className="flex flex-wrap gap-2">
-					{correctAnswers.map((answer, index) => (
+					{correctAnswers.map((answer) => (
 						<div
-							key={index}
+							key={answer}
 							className="bg-green-200 text-green-800 px-4 py-2 rounded-full shadow-md animate-bounce"
 						>
 							{answer}
