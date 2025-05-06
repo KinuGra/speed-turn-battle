@@ -1,4 +1,5 @@
 "use client"
+import { useRouter } from "next/navigation" // ルーターをインポート
 import { useEffect, useState } from "react"
 import { question } from "../data/questions"
 import { Button } from "./shared/ui/button"
@@ -13,7 +14,7 @@ interface GameScreenProps {
 	player1: string
 	player2: string
 	targetCorrectAnswers: number
-	onGameEnd: (resultData: any) => void
+	onGameEnd: (resultData: any, score: number) => void // スコアを追加
 }
 
 const GameScreen = ({
@@ -22,6 +23,7 @@ const GameScreen = ({
 	targetCorrectAnswers,
 	onGameEnd,
 }: GameScreenProps) => {
+	const router = useRouter() // ルーターを初期化
 	const [time, setTime] = useState(0)
 	const [answer, setAnswer] = useState("")
 	const [usedAnswers, setUsedAnswers] = useState<string[]>([])
@@ -44,13 +46,13 @@ const GameScreen = ({
 		)
 
 		if (totalCorrectAnswers >= targetCorrectAnswers) {
-			onGameEnd({
-				playerRecords,
-				totalCorrectAnswers,
-				timeElapsed: time,
-			})
+			router.push(
+				`/Result?playerRecords=${encodeURIComponent(
+					JSON.stringify(playerRecords),
+				)}&totalCorrectAnswers=${totalCorrectAnswers}&timeElapsed=${time}&score=${score}&targetCorrectAnswers=${targetCorrectAnswers}`,
+			) // クエリパラメータにスコアを含める
 		}
-	}, [playerRecords, targetCorrectAnswers, time, onGameEnd])
+	}, [playerRecords, targetCorrectAnswers, time, score, router])
 
 	const handleClick = () => {
 		// 回答フォームが未入力の場合は何もしない
@@ -178,7 +180,7 @@ const GameScreen = ({
 			</div>
 
 			{/* スコア表示 */}
-			<div className="border-2 border-gray-300 rounded p-4 bg-blue-100 shadow-md w-1/2 max-w-50 mx-auto mb-2 mt-2">
+			<div className="border-2 border-gray-300 rounded p-4 bg-white shadow-md w-1/2 max-w-50 mx-auto mb-2 mt-2">
 				<div className="flex justify-center items-center gap-4">
 					<div className="text-xl font-bold">Score:</div>
 					<div className="text-2xl font-bold">{score}</div>

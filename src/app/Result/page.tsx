@@ -15,6 +15,7 @@ export default function Result() {
 	) // 回答数を計算
 	const timeElapsed = searchParams.get("timeElapsed") || "0"
 	const targetCorrectAnswers = searchParams.get("targetCorrectAnswers") || "0"
+	const score = Number.parseInt(searchParams.get("score") || "0", 10) // スコアを取得
 
 	return (
 		<div className="h-screen flex flex-col items-center justify-center bg-gray-100">
@@ -24,6 +25,7 @@ export default function Result() {
 				合計正解数: {totalCorrectAnswers} / {totalAttempts}
 			</p>
 			<p className="text-lg mb-4">経過時間: {timeElapsed}秒</p>
+			<p className="text-lg mb-4">スコア: {score}</p>
 			<div className="w-3/4 max-w-lg bg-white rounded-lg shadow-md p-6">
 				{playerRecords.map((record: any, index: number) => (
 					<div key={index} className="mb-4">
