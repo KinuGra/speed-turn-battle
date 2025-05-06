@@ -46,6 +46,7 @@ const GameScreen = ({
 		)
 
 		if (totalCorrectAnswers >= targetCorrectAnswers) {
+			setIsModalOpen(false)
 			router.push(
 				`/Result?playerRecords=${encodeURIComponent(
 					JSON.stringify(playerRecords),
