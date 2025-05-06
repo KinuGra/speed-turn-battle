@@ -15,10 +15,12 @@ export default function Result() {
 	) // 回答数を計算
 	const timeElapsed = searchParams.get("timeElapsed") || "0"
 	const targetCorrectAnswers = searchParams.get("targetCorrectAnswers") || "0"
+	const score = Number.parseInt(searchParams.get("score") || "0", 10) // スコアを取得
 
 	return (
 		<div className="h-screen flex flex-col items-center justify-center bg-gray-100">
 			<h1 className="text-3xl font-bold mb-6">リザルト</h1>
+			<p className="text-lg mb-4">スコア: {score}</p>
 			<p className="text-lg mb-4">目標正解数: {targetCorrectAnswers}</p>
 			<p className="text-lg mb-4">
 				合計正解数: {totalCorrectAnswers} / {totalAttempts}

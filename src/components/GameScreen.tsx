@@ -1,4 +1,5 @@
 "use client"
+import { useRouter } from "next/navigation" // ルーターをインポート
 import { useEffect, useState } from "react"
 import { question } from "../data/questions"
 import { Button } from "./shared/ui/button"
@@ -13,7 +14,7 @@ interface GameScreenProps {
 	player1: string
 	player2: string
 	targetCorrectAnswers: number
-	onGameEnd: (resultData: any) => void
+	onGameEnd: (resultData: any, score: number) => void // スコアを追加
 }
 
 const GameScreen = ({
@@ -22,6 +23,7 @@ const GameScreen = ({
 	targetCorrectAnswers,
 	onGameEnd,
 }: GameScreenProps) => {
+	const router = useRouter() // ルーターを初期化
 	const [time, setTime] = useState(0)
 	const [answer, setAnswer] = useState("")
 	const [usedAnswers, setUsedAnswers] = useState<string[]>([])
@@ -32,6 +34,9 @@ const GameScreen = ({
 		{ name: player1, correctAnswers: 0, answers: [] as string[] },
 		{ name: player2, correctAnswers: 0, answers: [] as string[] },
 	])
+	const [correctAnswers, setCorrectAnswers] = useState<string[]>([]) // 過去の正解回答を保持
+	const [turnStartTime, setTurnStartTime] = useState(Date.now()) // ターン開始時の時間を保持
+	const [score, setScore] = useState(0) // スコア
 
 	// 合計正解数を監視し、条件を満たしたらリザルト画面に遷移
 	useEffect(() => {
@@ -41,13 +46,19 @@ const GameScreen = ({
 		)
 
 		if (totalCorrectAnswers >= targetCorrectAnswers) {
-			onGameEnd({
-				playerRecords,
-				totalCorrectAnswers,
-				timeElapsed: time,
-			})
+			setIsModalOpen(false)
+			router.push(
+				`/Result?playerRecords=${encodeURIComponent(
+					JSON.stringify(playerRecords),
+				)}&totalCorrectAnswers=${totalCorrectAnswers}&timeElapsed=${time}&score=${score}&targetCorrectAnswers=${targetCorrectAnswers}`,
+			) // クエリパラメータにスコアを含める
 		}
-	}, [playerRecords, targetCorrectAnswers, time, onGameEnd])
+	}, [playerRecords, targetCorrectAnswers, time, score, router])
+
+	useEffect(() => {
+		// ゲーム開始時にモーダルを開く
+		setIsModalOpen(true)
+	}, [])
 
 	const handleClick = () => {
 		// 回答フォームが未入力の場合は何もしない
@@ -70,7 +81,8 @@ const GameScreen = ({
 
 		if (usedAnswers.includes(normalizedAnswer)) {
 			setNotification("既に回答されています。再度回答を入力してください。")
-			setAnswer("")
+			setScore((pre) => pre - 50) //スコアを減少
+			setAnswer("") // フォームをクリア
 			return
 		}
 
@@ -78,6 +90,14 @@ const GameScreen = ({
 			item.answer.includes(normalizedAnswer),
 		)
 		if (isCorrect) {
+			// 終了時の時間を取得
+			const endTime = Date.now()
+			const elapsedTime = (endTime - turnStartTime) / 1000
+
+			const baseScore = 3000 // 基本スコア
+			const timeBonus = Math.floor(baseScore / elapsedTime) // 経過時間に基づくボーナス
+			const TimeScore = Math.min(timeBonus, 9999) // スコアの上限を9999に設定
+
 			setUsedAnswers((prev) => [...prev, normalizedAnswer])
 			setPlayerRecords((prev) => {
 				const updatedRecords = [...prev]
@@ -88,13 +108,24 @@ const GameScreen = ({
 				return updatedRecords
 			})
 
+			// 正解回答を追加し、アニメーションをトリガー
+			setCorrectAnswers((prev) => [...prev, normalizedAnswer])
+
 			setCurrentPlayer((prev) => (prev + 1) % 2)
 			setNotification("")
 			setIsModalOpen(true)
+			setScore((pre) => pre + TimeScore) //スコアを増加
+			setAnswer("") // 正解時もフォームをクリア
 		} else {
 			setNotification("不正解です。再度回答を入力してください。")
+			setScore((pre) => pre - 100) //スコアを減少
+			setAnswer("") // フォームをクリア
 		}
-		setAnswer("")
+	}
+
+	const handleModalClose = () => {
+		setIsModalOpen(false)
+		setTurnStartTime(Date.now()) // ターン開始時の時間を更新
 	}
 
 	useEffect(() => {
@@ -118,14 +149,14 @@ const GameScreen = ({
 						</DialogTitle>
 					</DialogHeader>
 					<div className="flex justify-center mt-6">
-						<Button variant="secondary" onClick={() => setIsModalOpen(false)}>
+						<Button variant="secondary" onClick={handleModalClose}>
 							OK
 						</Button>
 					</div>
 				</DialogContent>
 			</Dialog>
 
-			<div className="border-2 border-gray-300 rounded p-4 bg-yellow-50 shadow-md w-1/2 mx-auto mt-5">
+			<div className="border-2 border-gray-300 rounded p-4 bg-gray-50 shadow-md w-1/2 mx-auto mt-5">
 				<div className="flex flex-col justify-center items-center">
 					<h1 className="text-center font-bold text-2xl">問題</h1>
 				</div>
@@ -151,6 +182,29 @@ const GameScreen = ({
 				</div>
 				<div>
 					<p className="text-center text-red-500 mt-3">{notification}</p>
+				</div>
+			</div>
+
+			{/* スコア表示 */}
+			<div className="border-2 border-gray-300 rounded p-4 bg-white shadow-md w-1/2 max-w-50 mx-auto mb-2 mt-2">
+				<div className="flex justify-center items-center gap-4">
+					<div className="text-xl font-bold">Score:</div>
+					<div className="text-2xl font-bold">{score}</div>
+				</div>
+			</div>
+
+			{/* 正解回答の表示 */}
+			<div className="border-2 border-gray-300 rounded p-4 bg-white shadow-md w-3/4 max-w-130 mx-auto mb-5">
+				<h2 className="text-xl font-bold mb-4">既出回答</h2>
+				<div className="flex flex-wrap gap-2">
+					{correctAnswers.map((answer) => (
+						<div
+							key={answer}
+							className="bg-green-200 text-green-800 px-4 py-2 rounded-full shadow-md animate-bounce"
+						>
+							{answer}
+						</div>
+					))}
 				</div>
 			</div>
 
