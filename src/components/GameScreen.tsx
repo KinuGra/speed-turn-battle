@@ -33,6 +33,8 @@ const GameScreen = ({
 		{ name: player2, correctAnswers: 0, answers: [] as string[] },
 	])
 	const [correctAnswers, setCorrectAnswers] = useState<string[]>([]) // 過去の正解回答を保持
+	const [turnStartTime, setTurnStartTime] = useState(Date.now()) // ターン開始時の時間を保持
+	const [score, setScore] = useState(0) // スコア
 
 	// 合計正解数を監視し、条件を満たしたらリザルト画面に遷移
 	useEffect(() => {
@@ -71,6 +73,7 @@ const GameScreen = ({
 
 		if (usedAnswers.includes(normalizedAnswer)) {
 			setNotification("既に回答されています。再度回答を入力してください。")
+			setScore((pre) => pre - 20) //スコアを減少
 			setAnswer("") // フォームをクリア
 			return
 		}
@@ -79,6 +82,14 @@ const GameScreen = ({
 			item.answer.includes(normalizedAnswer),
 		)
 		if (isCorrect) {
+			// 終了時の時間を取得
+			const endTime = Date.now()
+			const elapsedTime = (endTime - turnStartTime) / 1000
+
+			const baseScore = 3000 // 基本スコア
+			const timeBonus = Math.floor(baseScore / elapsedTime) // 経過時間に基づくボーナス
+			const TimeScore = Math.min(timeBonus, 9999) // スコアの上限を9999に設定
+
 			setUsedAnswers((prev) => [...prev, normalizedAnswer])
 			setPlayerRecords((prev) => {
 				const updatedRecords = [...prev]
@@ -95,11 +106,18 @@ const GameScreen = ({
 			setCurrentPlayer((prev) => (prev + 1) % 2)
 			setNotification("")
 			setIsModalOpen(true)
+			setScore((pre) => pre + TimeScore) //スコアを増加
 			setAnswer("") // 正解時もフォームをクリア
 		} else {
 			setNotification("不正解です。再度回答を入力してください。")
+			setScore((pre) => pre - 50) //スコアを減少
 			setAnswer("") // フォームをクリア
 		}
+	}
+
+	const handleModalClose = () => {
+		setIsModalOpen(false)
+		setTurnStartTime(Date.now()) // ターン開始時の時間を更新
 	}
 
 	useEffect(() => {
@@ -123,7 +141,7 @@ const GameScreen = ({
 						</DialogTitle>
 					</DialogHeader>
 					<div className="flex justify-center mt-6">
-						<Button variant="secondary" onClick={() => setIsModalOpen(false)}>
+						<Button variant="secondary" onClick={handleModalClose}>
 							OK
 						</Button>
 					</div>
@@ -159,13 +177,21 @@ const GameScreen = ({
 				</div>
 			</div>
 
+			{/* スコア表示 */}
+			<div className="border-2 border-gray-300 rounded p-4 bg-blue-100 shadow-md w-1/2 max-w-50 mx-auto mb-2 mt-2">
+				<div className="flex justify-center items-center gap-4">
+					<div className="text-xl font-bold">Score:</div>
+					<div className="text-2xl font-bold">{score}</div>
+				</div>
+			</div>
+
 			{/* 正解回答の表示 */}
 			<div className="border-2 border-gray-300 rounded p-4 bg-white shadow-md w-3/4 max-w-130 mx-auto mb-5">
 				<h2 className="text-xl font-bold mb-4">既出回答</h2>
 				<div className="flex flex-wrap gap-2">
-					{correctAnswers.map((answer, index) => (
+					{correctAnswers.map((answer) => (
 						<div
-							key={index}
+							key={answer}
 							className="bg-green-200 text-green-800 px-4 py-2 rounded-full shadow-md animate-bounce"
 						>
 							{answer}
