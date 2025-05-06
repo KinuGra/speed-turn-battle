@@ -20,12 +20,12 @@ export default function Result() {
 	return (
 		<div className="h-screen flex flex-col items-center justify-center bg-gray-100">
 			<h1 className="text-3xl font-bold mb-6">リザルト</h1>
+			<p className="text-lg mb-4">スコア: {score}</p>
 			<p className="text-lg mb-4">目標正解数: {targetCorrectAnswers}</p>
 			<p className="text-lg mb-4">
 				合計正解数: {totalCorrectAnswers} / {totalAttempts}
 			</p>
 			<p className="text-lg mb-4">経過時間: {timeElapsed}秒</p>
-			<p className="text-lg mb-4">スコア: {score}</p>
 			<div className="w-3/4 max-w-lg bg-white rounded-lg shadow-md p-6">
 				{playerRecords.map((record: any, index: number) => (
 					<div key={index} className="mb-4">

@@ -55,6 +55,11 @@ const GameScreen = ({
 		}
 	}, [playerRecords, targetCorrectAnswers, time, score, router])
 
+	useEffect(() => {
+		// ゲーム開始時にモーダルを開く
+		setIsModalOpen(true)
+	}, [])
+
 	const handleClick = () => {
 		// 回答フォームが未入力の場合は何もしない
 		if (!answer.trim()) {
@@ -76,7 +81,7 @@ const GameScreen = ({
 
 		if (usedAnswers.includes(normalizedAnswer)) {
 			setNotification("既に回答されています。再度回答を入力してください。")
-			setScore((pre) => pre - 20) //スコアを減少
+			setScore((pre) => pre - 50) //スコアを減少
 			setAnswer("") // フォームをクリア
 			return
 		}
@@ -113,7 +118,7 @@ const GameScreen = ({
 			setAnswer("") // 正解時もフォームをクリア
 		} else {
 			setNotification("不正解です。再度回答を入力してください。")
-			setScore((pre) => pre - 50) //スコアを減少
+			setScore((pre) => pre - 100) //スコアを減少
 			setAnswer("") // フォームをクリア
 		}
 	}
