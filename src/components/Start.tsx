@@ -8,7 +8,7 @@ import Confetti from "react-confetti"
 import CountUp from "react-countup"
 
 export default function Start() {
-	const [targetCorrectAnswers, setTargetCorrectAnswers] = useState(2) // 設定画面の何問正解すればリザルト画面に遷移するかはここでデフォルト値を設定
+	const [targetCorrectAnswers, setTargetCorrectAnswers] = useState(10) // 設定画面の何問正解すればリザルト画面に遷移するかはここでデフォルト値を設定
 	const [showConfetti, setShowConfetti] = useState(false)
 
 	useEffect(() => {
