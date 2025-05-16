@@ -150,93 +150,95 @@ const GameScreen = ({
 	}, [])
 
 	return (
-		<div className="h-screen flex flex-col justify-between bg-gradient-to-br from-yellow-100 via-pink-100 to-blue-100 relative overflow-hidden">
+		<div className="min-h-screen w-full flex flex-col bg-gradient-to-br from-yellow-100 via-pink-100 to-blue-100 relative overflow-hidden">
 			{showConfetti && <Confetti width={window.innerWidth} height={window.innerHeight} numberOfPieces={180} recycle={false} />}
-			{/* モーダル */}
-			<Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-				<DialogContent className="bg-white/90 text-black rounded-2xl shadow-2xl p-8 border-4 border-yellow-200">
-					<DialogHeader>
-						<DialogTitle className="text-3xl font-extrabold text-center text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-pink-400 to-blue-400 drop-shadow-lg animate-bounce">
-							{playerRecords[currentPlayer].name}さんのターン
-						</DialogTitle>
-					</DialogHeader>
-					<div className="flex justify-center mt-6">
-						<Button variant="secondary" onClick={handleModalClose} className="px-6 py-2 rounded-full bg-gradient-to-r from-blue-400 via-pink-400 to-yellow-400 text-white font-bold shadow-md hover:scale-105 transition-transform">
-							OK
-						</Button>
-					</div>
-				</DialogContent>
-			</Dialog>
-
-			<div className="border-4 border-yellow-200 rounded-2xl p-6 bg-white/80 shadow-xl w-11/12 md:w-3/5 mx-auto mt-8">
-				<div className="flex flex-col justify-center items-center">
-					<h1 className="text-center font-extrabold text-2xl md:text-3xl text-indigo-700 mb-2">問題</h1>
-				</div>
-				<div>
-					{question.map((item) => (
-						<div
-							key={item.id}
-							className="flex flex-col justify-center items-center mt-5"
-						>
-							<h2 className="text-center font-bold text-xl md:text-2xl text-pink-600">
-								{item.question}
-							</h2>
+			<div className="flex-1 flex flex-col justify-between overflow-y-auto">
+				{/* モーダル */}
+				<Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+					<DialogContent className="bg-white/90 text-black rounded-2xl shadow-2xl p-8 border-4 border-yellow-200">
+						<DialogHeader>
+							<DialogTitle className="text-3xl font-extrabold text-center text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-pink-400 to-blue-400 drop-shadow-lg animate-bounce">
+								{playerRecords[currentPlayer].name}さんのターン
+							</DialogTitle>
+						</DialogHeader>
+						<div className="flex justify-center mt-6">
+							<Button variant="secondary" onClick={handleModalClose} className="px-6 py-2 rounded-full bg-gradient-to-r from-blue-400 via-pink-400 to-yellow-400 text-white font-bold shadow-md hover:scale-105 transition-transform">
+								OK
+							</Button>
 						</div>
-					))}
-				</div>
-				<div>
-					<p className="text-center font-bold mt-3 text-blue-600">経過時間：{time}秒</p>
-				</div>
-				<div>
-					<p className="text-center font-bold mt-3 text-indigo-700">
-						現在のターン: {playerRecords[currentPlayer].name}さん
-					</p>
-				</div>
-				<div>
-					<p className="text-center text-red-500 mt-3 font-semibold">{notification}</p>
-				</div>
-			</div>
+					</DialogContent>
+				</Dialog>
 
-			{/* スコア表示 */}
-			<div className="border-4 border-pink-200 rounded-2xl p-4 bg-white/90 shadow-lg w-11/12 md:w-2/5 max-w-2xl mx-auto mb-2 mt-4 flex flex-col items-center">
-				<div className="flex justify-center items-center gap-4">
-					<div className="text-xl font-bold text-yellow-600">Score:</div>
-					<div className="text-3xl font-extrabold text-pink-500 drop-shadow-sm">
-						<CountUp end={score} duration={1.2} />
+				<div className="border-4 border-yellow-200 rounded-2xl p-6 bg-white/80 shadow-xl w-11/12 md:w-3/5 mx-auto mt-8">
+					<div className="flex flex-col justify-center items-center">
+						<h1 className="text-center font-extrabold text-2xl md:text-3xl text-indigo-700 mb-2">問題</h1>
+					</div>
+					<div>
+						{question.map((item) => (
+							<div
+								key={item.id}
+								className="flex flex-col justify-center items-center mt-5"
+							>
+								<h2 className="text-center font-bold text-xl md:text-2xl text-pink-600">
+									{item.question}
+								</h2>
+							</div>
+						))}
+					</div>
+					<div>
+						<p className="text-center font-bold mt-3 text-blue-600">経過時間：{time}秒</p>
+					</div>
+					<div>
+						<p className="text-center font-bold mt-3 text-indigo-700">
+							現在のターン: {playerRecords[currentPlayer].name}さん
+						</p>
+					</div>
+					<div>
+						<p className="text-center text-red-500 mt-3 font-semibold">{notification}</p>
 					</div>
 				</div>
-			</div>
 
-			{/* 正解回答の表示 */}
-			<div className="border-4 border-blue-200 rounded-2xl p-4 bg-white/90 shadow-lg w-11/12 md:w-3/5 max-w-3xl mx-auto mb-5">
-				<h2 className="text-xl font-bold mb-4 text-green-700">既出回答</h2>
-				<div className="flex flex-wrap gap-2">
-					{correctAnswers.map((answer) => (
-						<div
-							key={answer}
-							className="bg-green-200 text-green-800 px-4 py-2 rounded-full shadow-md animate-bounce"
-						>
-							{answer}
+				{/* スコア表示 */}
+				<div className="border-4 border-pink-200 rounded-2xl p-4 bg-white/90 shadow-lg w-11/12 md:w-2/5 max-w-2xl mx-auto mb-2 mt-4 flex flex-col items-center">
+					<div className="flex justify-center items-center gap-4">
+						<div className="text-xl font-bold text-yellow-600">Score:</div>
+						<div className="text-3xl font-extrabold text-pink-500 drop-shadow-sm">
+							<CountUp end={score} duration={1.2} />
 						</div>
-					))}
+					</div>
 				</div>
-			</div>
 
-			<div className="border-4 border-indigo-200 rounded-2xl p-4 bg-white/90 shadow-lg w-11/12 md:w-3/5 max-w-3xl mx-auto mb-8">
-				<div className="flex flex-col gap-4">
-					<div className="flex gap-2 items-center max-w-md w-full mx-auto">
-						<input
-							id="answer"
-							type="text"
-							autoComplete="off"
-							value={answer}
-							onChange={(e) => setAnswer(e.target.value)}
-							placeholder="ここに回答を入力"
-							className="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 w-full text-lg"
-						/>
-						<Button type="button" onClick={handleClick} className="px-6 py-2 rounded-full bg-gradient-to-r from-blue-400 via-pink-400 to-yellow-400 text-white font-bold shadow-md hover:scale-105 transition-transform">
-							回答
-						</Button>
+				{/* 正解回答の表示 */}
+				<div className="border-4 border-blue-200 rounded-2xl p-4 bg-white/90 shadow-lg w-11/12 md:w-3/5 max-w-3xl mx-auto mb-5">
+					<h2 className="text-xl font-bold mb-4 text-green-700">既出回答</h2>
+					<div className="flex flex-wrap gap-2">
+						{correctAnswers.map((answer) => (
+							<div
+								key={answer}
+								className="bg-green-200 text-green-800 px-4 py-2 rounded-full shadow-md animate-bounce"
+							>
+								{answer}
+							</div>
+						))}
+					</div>
+				</div>
+
+				<div className="border-4 border-indigo-200 rounded-2xl p-4 bg-white/90 shadow-lg w-11/12 md:w-3/5 max-w-3xl mx-auto mb-8">
+					<div className="flex flex-col gap-4">
+						<div className="flex gap-2 items-center max-w-md w-full mx-auto">
+							<input
+								id="answer"
+								type="text"
+								autoComplete="off"
+								value={answer}
+								onChange={(e) => setAnswer(e.target.value)}
+								placeholder="ここに回答を入力"
+								className="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 w-full text-lg"
+							/>
+							<Button type="button" onClick={handleClick} className="px-6 py-2 rounded-full bg-gradient-to-r from-blue-400 via-pink-400 to-yellow-400 text-white font-bold shadow-md hover:scale-105 transition-transform">
+								回答
+							</Button>
+						</div>
 					</div>
 				</div>
 			</div>

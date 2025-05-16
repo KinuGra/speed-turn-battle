@@ -171,7 +171,7 @@ export const question = [
 			"アシガバート".toLowerCase(), // トルクメニスタン
 			"ファンヌアフティ".toLowerCase(), // ツバル
 			"カンパラ".toLowerCase(), // ウガンダ
-			"キエフ（キーウ）".toLowerCase(), // ウクライナ
+			"キエフ".toLowerCase(), // ウクライナ
 			"アブダビ".toLowerCase(), // アラブ首長国連邦
 			"ロンドン".toLowerCase(), // イギリス
 			"ワシントンD.C.".toLowerCase(), // アメリカ合衆国

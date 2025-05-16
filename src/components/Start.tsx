@@ -20,7 +20,7 @@ export default function Start() {
 	return (
 		<main className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-yellow-100 via-pink-100 to-blue-100 text-gray-900 dark:text-gray-100 relative overflow-hidden">
 			{showConfetti && <Confetti width={window.innerWidth} height={window.innerHeight} numberOfPieces={200} recycle={false} />}
-			<h1 className="text-5xl font-extrabold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-pink-400 to-blue-400 drop-shadow-lg animate-bounce">Speed Turn Battle</h1>
+			<h1 className="text-5xl font-extrabold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-pink-400 to-blue-400 drop-shadow-lg animate-bounce text-center w-full">Speed Turn Battle</h1>
 			<p className="text-lg mb-8 text-gray-700 dark:text-gray-200 shadow-sm bg-white/70 rounded-xl px-6 py-3">
 				2人のプレイヤーが交互に回答するスピードを競います！
 			</p>
