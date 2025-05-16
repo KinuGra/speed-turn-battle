@@ -2,10 +2,19 @@
 
 import { useRouter, useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
+import { Suspense } from "react"
 import Confetti from "react-confetti"
 import CountUp from "react-countup"
 
 export default function Result() {
+	return (
+		<Suspense>
+			<ResultContent />
+		</Suspense>
+	)
+}
+
+function ResultContent() {
 	const searchParams = useSearchParams()
 	const router = useRouter()
 	const playerRecords: { name: string; correctAnswers: number; answers: string[] }[] = JSON.parse(searchParams.get("playerRecords") || "[]")

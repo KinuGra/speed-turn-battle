@@ -2,8 +2,17 @@
 
 import GameScreen from "@/components/GameScreen"
 import { useRouter, useSearchParams } from "next/navigation"
+import { Suspense } from "react"
 
 export default function Game() {
+	return (
+		<Suspense>
+			<GameContent />
+		</Suspense>
+	)
+}
+
+function GameContent() {
 	const searchParams = useSearchParams()
 	const router = useRouter()
 	const player1 = searchParams.get("player1") || "プレイヤー1"
